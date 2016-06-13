@@ -11,6 +11,15 @@
 #DBAUTH="-u clusterAdmin -p ${CLUSTER_ADMIN_PASS} --authenticationDatabase admin"
 #BACKGROUND="--fork --logpath $MONGO_LOG" 
 
+
+
+echo " upstream_url: $API_UPSTREAM_URL"
+#extract the ip
+API_UPSTREAM_IP=$(nslookup ${API_UPSTREAM_HOST}|sed 's/[^0-9. ]//g'|tail -n 1|awk -F " " '{print $2}')
+#build the UPSTREAM_URL with ip
+API_UPSTREAM_URL="http://${API_UPSTREAM_IP}:${API_UPSTREAM_PORT}/${API_UPSTREAM_PATH}"
+echo " upstream_url: $API_UPSTREAM_URL"
+
 # function: wait for service. waits for TCP service 
 # param 1: Host
 # param 2: Port
