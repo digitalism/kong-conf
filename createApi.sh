@@ -34,4 +34,4 @@ waitFor(){
 echo "waiting for kong to come up .."
 waitFor ${KONG_HOST} ${KONG_ADMIN_PORT}
 echo "creating kong api .."
-curl -X POST -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
+curl -X PUT -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
