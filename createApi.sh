@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -x
 # initialize variables
 #MONGO_LOG="/var/log/mongodb/mongod.log"
@@ -10,15 +10,6 @@ set -x
 #DBNAME=$STACK_NAME
 #DBAUTH="-u clusterAdmin -p ${CLUSTER_ADMIN_PASS} --authenticationDatabase admin"
 #BACKGROUND="--fork --logpath $MONGO_LOG" 
-
-
-
-echo " upstream_url: $API_UPSTREAM_URL"
-#extract the ip
-API_UPSTREAM_IP=$(nslookup ${API_UPSTREAM_HOST}|sed 's/[^0-9. ]//g'|tail -n 1|awk -F " " '{print $2}')
-#build the UPSTREAM_URL with ip
-API_UPSTREAM_URL="http://${API_UPSTREAM_IP}:${API_UPSTREAM_PORT}/${API_UPSTREAM_PATH}"
-echo " upstream_url: $API_UPSTREAM_URL"
 
 # function: wait for service. waits for TCP service 
 # param 1: Host
@@ -33,6 +24,15 @@ waitFor(){
 
 echo "waiting for kong to come up .."
 waitFor ${KONG_HOST} ${KONG_ADMIN_PORT}
+waitFor ${API_UPSTREAM_HOST} ${API_UPSTREAM_PORT}
+
+echo " upstream_url: $API_UPSTREAM_URL"
+#extract the ip
+API_UPSTREAM_IP=$(getent hosts ${API_UPSTREAM_HOST} | cut -d ' ' -f1)
+#build the UPSTREAM_URL with ip
+API_UPSTREAM_URL="http://${API_UPSTREAM_IP}:${API_UPSTREAM_PORT}${API_UPSTREAM_PATH}"
+echo " upstream_url: $API_UPSTREAM_URL"
+
 echo "creating kong api .."
 curl -X POST -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
 #in case it already exists. update it
