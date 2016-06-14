@@ -34,6 +34,6 @@ API_UPSTREAM_URL="http://${API_UPSTREAM_IP}:${API_UPSTREAM_PORT}${API_UPSTREAM_P
 echo " upstream_url: $API_UPSTREAM_URL"
 
 echo "creating kong api .."
-curl -X POST -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=true" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
+curl -X POST -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=${API_STRIP_REQ_PATH}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
 #in case it already exists. update it
-curl -X PATCH -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=true" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}
+curl -X PATCH -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=${API_STRIP_REQ_PATH}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}
