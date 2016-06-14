@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+set -x
 # initialize variables
 #MONGO_LOG="/var/log/mongodb/mongod.log"
 #MONGO="/usr/bin/mongo"
@@ -34,4 +34,6 @@ waitFor(){
 echo "waiting for kong to come up .."
 waitFor ${KONG_HOST} ${KONG_ADMIN_PORT}
 echo "creating kong api .."
-curl -X PUT -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
+curl -X POST -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
+#in case it already exists. update it
+curl -X PATCH -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}
