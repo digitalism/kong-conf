@@ -26,12 +26,12 @@ echo "waiting for kong to come up .."
 waitFor ${KONG_HOST} ${KONG_ADMIN_PORT}
 waitFor ${API_UPSTREAM_HOST} ${API_UPSTREAM_PORT}
 
-echo " upstream_url: $API_UPSTREAM_URL"
-#extract the ip
-API_UPSTREAM_IP=$(getent hosts ${API_UPSTREAM_HOST} | cut -d ' ' -f1)
-#build the UPSTREAM_URL with ip
-API_UPSTREAM_URL="http://${API_UPSTREAM_IP}:${API_UPSTREAM_PORT}${API_UPSTREAM_PATH}"
-echo " upstream_url: $API_UPSTREAM_URL"
+#echo " upstream_url: $API_UPSTREAM_URL"
+##extract the ip
+#API_UPSTREAM_IP=$(getent hosts ${API_UPSTREAM_HOST} | cut -d ' ' -f1)
+##build the UPSTREAM_URL with ip
+#API_UPSTREAM_URL="http://${API_UPSTREAM_IP}:${API_UPSTREAM_PORT}${API_UPSTREAM_PATH}"
+#echo " upstream_url: $API_UPSTREAM_URL"
 
 echo "creating kong api .."
 curl -X POST -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=${API_STRIP_REQ_PATH}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
