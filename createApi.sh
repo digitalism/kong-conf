@@ -11,8 +11,9 @@ set -x
 #DBAUTH="-u clusterAdmin -p ${CLUSTER_ADMIN_PASS} --authenticationDatabase admin"
 #BACKGROUND="--fork --logpath $MONGO_LOG" 
 
-API_UPSTREAM_HOST=$(echo $API_UPSTREAM_URL | cut -d ':' -f1)
-API_UPSTREAM_PORT=$(echo $API_UPSTREAM_URL | cut -d ':' -f2 | cut -d '/' -f1)
+#expecting chema: http://meine-url.domain:port/path
+API_UPSTREAM_HOST=$(echo $API_UPSTREAM_URL | cut -d ':' -f2 | cut -d '/' -f3)
+API_UPSTREAM_PORT=$(echo $API_UPSTREAM_URL | cut -d ':' -f3 | cut -d '/' -f1)
 # function: wait for service. waits for TCP service 
 # param 1: Host
 # param 2: Port
