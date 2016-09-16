@@ -1,0 +1,17 @@
+kong-delete-dashboard:
+  image: kong-conf 
+  environment:
+   KONG_HOST: kong.kong
+   API_NAME: openparse-${STACK_NAME}-dashboard
+  command: /opt/bin/delete-api.sh
+  labels:
+    io.rancher.container.start_once: 'true'
+
+kong-delete-api:
+  image: kong-conf 
+  environment:
+   KONG_HOST: kong.kong
+   API_NAME: openparse-${STACK_NAME}-api
+  command: /opt/bin/delete-api.sh
+  labels:
+    io.rancher.container.start_once: 'true'

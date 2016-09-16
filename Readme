@@ -8,8 +8,8 @@ docker build -t derdiedajsojo/kong-conf .
 run:
 ----
 
-docker run -ti derdiedasjojo/kong-conf /opt/createApi.sh
+docker run -ti derdiedasjojo/kong-conf /opt/create-api.sh
 
 or
-docker run -ti -e API_PATH=/rofl2 -e API_UPSTREAM_URL=http://172.17.8.102:4040/  kong-conf /opt/createApi.sh
+docker run -ti -e API_PATH=/rofl2 -e API_UPSTREAM_URL=http://172.17.8.102:4040/  kong-conf /opt/create-api.sh
 

@@ -1,9 +1,12 @@
-#FROM progrium/busybox
-#RUN opkg-install netcat curl bash
-FROM alpine:3.3
+FROM alpine:3.4
+
 RUN apk add --no-cache curl
-ADD createApi.sh /opt/createApi.sh
-ENV KONG_HOST kong.kong
+
+ADD shared.sh /opt/bin/shared.sh
+ADD create-api.sh /opt/bin/create-api.sh
+ADD delete-api.sh /opt/bin/delete-api.sh
+
+ENV KONG_HOST kong.openparse
 ENV KONG_ADMIN_PORT 8001
 ENV API_NAME test
 ENV API_PATH /test
