@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x 
 
 source /opt/bin/shared.sh
 
@@ -16,7 +16,23 @@ echo "added kong api endpoint: ${API_PATH} -> ${API_UPSTREAM_URL}"
 
 
 if [ ! -z "$API_AUTH_USERNAME" ]; then
+    echo "adding user: ${API_AUTH_USERNAME} to api: ${API_NAME}"
     curl -X POST -s -d "username=${API_AUTH_USERNAME}" ${KONG_HOST}:${KONG_ADMIN_PORT}/consumers
-    curl -X PUT -s -d "username=${API_AUTH_USERNAME}" -d"password=${API_AUTH_PASSWORD}" ${KONG_HOST}:${KONG_ADMIN_PORT}/consumers/${API_AUTH_USERAME}/basic-auth
+    curl -X PUT -s -d "username=${API_AUTH_USERNAME}" -d"password=${API_AUTH_PASSWORD}" ${KONG_HOST}:${KONG_ADMIN_PORT}/consumers/${API_AUTH_USERNAME}/basic-auth
     curl -X POST -s -d "name=basic-auth" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins/
 fi
+
+
+if [ ! -z "$API_RATE_LIMIT" ]; then
+    echo "adding rate-limit to ${API_RATE_LIMIT} per sec"
+    curl -X POST -s -d "name=rate-limiting" -d "config.limit_by=consumer" -d "config.policy=cluster" -d "config.second=$API_RATE_LIMIT" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
+    curl -X POST -s -d "name=response-ratelimiting" -d "config.limit_by=consumer" -d "config.policy=cluster" -d "config.limits.calls.second=$API_RATE_LIMIT" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
+fi
+
+if [ ! -z "$API_LIMIT_REQUEST_SIZE" ]; then
+  echo "limiting the request-size to ${API_LIMIT_REQUEST_SIZE} MB"
+    curl -X POST -s -d "name=request-size-limiting" -d "config.allowed_payload_size=${API_LIMIT_REQUEST_SIZE}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
+
+fi
+
+sleep 3000
