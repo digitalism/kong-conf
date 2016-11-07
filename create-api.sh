@@ -19,3 +19,4 @@ if [ ! -z "$API_AUTH_USERNAME" ]; then
     curl -X POST -s -d "username=${API_AUTH_USERNAME}" ${KONG_HOST}:${KONG_ADMIN_PORT}/consumers
     curl -X PUT -s -d "username=${API_AUTH_USERNAME}" -d"password=${API_AUTH_PASSWORD}" ${KONG_HOST}:${KONG_ADMIN_PORT}/consumers/${API_AUTH_USERAME}/basic-auth
     curl -X POST -s -d "name=basic-auth" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins/
+fi
