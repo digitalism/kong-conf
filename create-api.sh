@@ -25,8 +25,8 @@ fi
 
 if [ ! -z "$API_RATE_LIMIT" ]; then
     echo "adding rate-limit to ${API_RATE_LIMIT} per sec"
-    curl -X POST -s -d "name=rate-limiting" -d "config.limit_by=consumer" -d "config.policy=cluster" -d "config.second=$API_RATE_LIMIT" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
-    curl -X POST -s -d "name=response-ratelimiting" -d "config.limit_by=consumer" -d "config.policy=cluster" -d "config.limits.calls.second=$API_RATE_LIMIT" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
+    curl -X POST -s -d "name=rate-limiting" -d "config.limit_by=all" -d "config.policy=cluster" -d "config.second=$API_RATE_LIMIT" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
+#    curl -X POST -s -d "name=response-ratelimiting" -d "config.limit_by=consumer" -d "config.policy=cluster" -d "config.limits.calls.second=$API_RATE_LIMIT" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}/plugins
 fi
 
 if [ ! -z "$API_LIMIT_REQUEST_SIZE" ]; then
