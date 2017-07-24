@@ -1,12 +1,12 @@
-#!/bin/sh -x 
+#!/bin/sh -x
 
 source /opt/bin/shared.sh
 
 echo "adding kong api endpoint: ${API_PATH} -> ${API_UPSTREAM_URL}"
-curl -X POST -s -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=${API_STRIP_REQ_PATH}" -d "preserve_host=${API_PRESERVE_HOST}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
+curl -X POST -s -d "uris=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_uri=${API_STRIP_REQ_PATH}" -d "preserve_host=${API_PRESERVE_HOST}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/
 
 # in case kong api endpoint already exists, update it
-curl -X PATCH -s -d "request_path=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_request_path=${API_STRIP_REQ_PATH}" -d "preserve_host=${API_PRESERVE_HOST}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}
+curl -X PATCH -s -d "uris=${API_PATH}" -d "upstream_url=${API_UPSTREAM_URL}" -d "name=${API_NAME}" -d "strip_uri=${API_STRIP_REQ_PATH}" -d "preserve_host=${API_PRESERVE_HOST}" ${KONG_HOST}:${KONG_ADMIN_PORT}/apis/${API_NAME}
 
 if [ ! -z "$API_PIWIK_ENDPOINT" ]; then
     echo "adding piwik plugin: {$API_PIWIK_ENDPOINT}"
